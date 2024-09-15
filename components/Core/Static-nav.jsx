@@ -110,6 +110,7 @@ export function StaticNav({ color }) {
             >
               Home
             </Link>
+            
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link
@@ -117,6 +118,14 @@ export function StaticNav({ color }) {
               className={`text-white hover:text-white inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2  text-base font-medium sfont-medium transition-colors`}
             >
               Meeting
+            </Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link
+              href={"/diaryEditor"}
+              className={`text-white hover:text-white inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2  text-base font-medium sfont-medium transition-colors`}
+            >
+              Diary
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
