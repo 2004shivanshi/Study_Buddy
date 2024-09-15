@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import dynamic from 'next/dynamic';
 
-const DiaryEditor = ({ onSave }) => {
+const DiaryEditor = () => {
   const [editorContent, setEditorContent] = useState('');
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const currentDate = new Date().toLocaleDateString();
     const currentTime = new Date().toLocaleTimeString();
 
@@ -16,21 +16,23 @@ const DiaryEditor = ({ onSave }) => {
       content: editorContent,
     };
 
-    fetch('/api/saveDiary', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(diaryData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Diary saved:', data);
-        onSave();
-      })
-      .catch((error) => {
-        console.error('Error saving diary:', error);
+    try {
+      const response = await fetch('/api/saveDiary', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(diaryData),
       });
+
+      if (!response.ok) throw new Error('Failed to save diary');
+
+      const data = await response.json();
+      console.log('Diary saved:', data);
+      onSave();
+    } catch (error) {
+      console.error('Error saving diary:', error);
+    }
   };
 
   return (
@@ -57,15 +59,12 @@ const DiaryEditor = ({ onSave }) => {
                 font-size: 14px;
               }
             `,
-            skin: 'oxide-dark', // TinyMCE dark mode
-            content_css: 'dark', // TinyMCE dark mode content
+            skin: 'oxide-dark',
+            content_css: 'dark',
           }}
           onEditorChange={(content) => setEditorContent(content)}
         />
-        <div
-          className="mt-4"
-          style={{ backgroundColor: 'black', padding: '10px', textAlign: 'right' }}
-        >
+        <div className="mt-4" style={{ backgroundColor: 'black', padding: '10px', textAlign: 'right' }}>
           <button
             style={{
               color: 'white',
